@@ -156,7 +156,7 @@ class TestMCPTools:
         assert isinstance(data, dict)
         assert "server" in data
         assert "available_tools" in data
-        assert data["server"]["version"] == "2.0.0"
+        assert data["server"]["version"] == "4.0.0"
 
 
 class TestSecurityFeatures:

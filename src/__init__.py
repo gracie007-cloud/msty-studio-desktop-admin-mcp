@@ -1,17 +1,19 @@
 """
 Msty Admin MCP Server
 
-AI-administered Msty Studio Desktop management system.
+AI-administered Msty Studio Desktop management system with database insights,
+configuration management, local model orchestration, and tiered AI workflows.
 
 Phase 1: Foundational Tools (Read-Only)
-Phase 2: Configuration Management (Planned)
-Phase 3: Automation Bridge (Planned)
-Phase 4: Intelligence Layer (Planned)
+Phase 2: Configuration Management
+Phase 3: Automation Bridge (Sidecar Integration)
+Phase 4: Intelligence Layer (Analytics)
+Phase 5: Tiered AI Workflow (Calibration)
 
 Created by Pineapple 🍍
 """
 
-__version__ = "2.0.0"
+__version__ = "4.0.0"
 __author__ = "Pineapple 🍍"
 
 from .server import mcp, main

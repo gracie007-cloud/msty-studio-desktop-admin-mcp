@@ -68,3 +68,8 @@ pip-delete-this-directory.txt
 # Backup files
 *.bak
 *.backup
+
+# Personal configuration exports (may contain API keys)
+msty-import/
+export/
+config-backup/
