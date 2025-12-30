@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "msty-admin-mcp"
-version = "4.0.0"
+version = "4.1.0"
 description = "MCP Server for Msty Studio Desktop Administration - Database insights, configuration management, hardware optimization, and Claude Desktop sync"
 readme = "README.md"
 license = "MIT"

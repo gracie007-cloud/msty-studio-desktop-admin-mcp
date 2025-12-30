@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Msty Admin MCP Server v4.0.0
+Msty Admin MCP Server v4.1.0
 
 AI-administered Msty Studio Desktop management system with database insights,
 configuration management, hardware optimization, and Claude Desktop sync.
@@ -86,10 +86,13 @@ mcp = FastMCP("msty-admin")
 # Constants
 # =============================================================================
 
-SERVER_VERSION = "4.0.0"
-SIDECAR_PROXY_PORT = 11932
-LOCAL_AI_SERVICE_PORT = 11964
-SIDECAR_TIMEOUT = 10
+SERVER_VERSION = "4.1.0"
+
+# Configurable via environment variables
+SIDECAR_HOST = os.environ.get("MSTY_SIDECAR_HOST", "127.0.0.1")
+SIDECAR_PROXY_PORT = int(os.environ.get("MSTY_PROXY_PORT", 11932))
+LOCAL_AI_SERVICE_PORT = int(os.environ.get("MSTY_AI_PORT", 11964))
+SIDECAR_TIMEOUT = int(os.environ.get("MSTY_TIMEOUT", 10))
 
 # =============================================================================
 # Data Classes
@@ -258,10 +261,12 @@ def make_api_request(
     port: int = LOCAL_AI_SERVICE_PORT,
     method: str = "GET",
     data: Optional[Dict] = None,
-    timeout: int = SIDECAR_TIMEOUT
+    timeout: int = SIDECAR_TIMEOUT,
+    host: str = None
 ) -> Dict[str, Any]:
     """Make HTTP request to Sidecar or Local AI Service API"""
-    url = f"http://127.0.0.1:{port}{endpoint}"
+    host = host or SIDECAR_HOST
+    url = f"http://{host}:{port}{endpoint}"
     
     try:
         if method == "GET":
@@ -279,12 +284,20 @@ def make_api_request(
                 "data": json.loads(response_data) if response_data else None
             }
     except urllib.error.URLError as e:
+        logger.warning(f"Connection failed to {url}: {e.reason}")
         return {"success": False, "error": f"Connection failed: {e.reason}"}
     except urllib.error.HTTPError as e:
-        return {"success": False, "error": f"HTTP {e.code}: {e.reason}", "status_code": e.code}
+        # Capture response body for better debugging
+        try:
+            error_body = e.read().decode('utf-8', errors='ignore')[:200]
+            logger.warning(f"HTTP {e.code} on {endpoint}: {error_body}")
+        except:
+            error_body = None
+        return {"success": False, "error": f"HTTP {e.code}: {e.reason}", "status_code": e.code, "error_body": error_body}
     except json.JSONDecodeError:
         return {"success": True, "status_code": 200, "data": response_data}
     except Exception as e:
+        logger.error(f"Unexpected error calling {url}: {e}")
         return {"success": False, "error": str(e)}
 
 
