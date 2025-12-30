@@ -4,7 +4,7 @@
 
 An MCP (Model Context Protocol) server that transforms Claude into an intelligent system administrator for [Msty Studio Desktop](https://msty.ai). Query databases, manage configurations, orchestrate local AI models, and build tiered AI workflows—all through natural conversation.
 
-[![Version](https://img.shields.io/badge/version-4.0.0-blue.svg)](https://github.com/M-Pineapple/msty-admin-mcp/releases)
+[![Version](https://img.shields.io/badge/version-4.1.0-blue.svg)](https://github.com/M-Pineapple/msty-admin-mcp/releases)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 [![Python](https://img.shields.io/badge/python-3.10+-yellow.svg)](https://python.org)
 [![Platform](https://img.shields.io/badge/platform-macOS-lightgrey.svg)](https://apple.com)
@@ -213,6 +213,34 @@ Add to `~/Library/Application Support/Claude/claude_desktop_config.json`:
 
 Restart Claude Desktop. You should see "msty-admin" in your available tools.
 
+### Environment Variables (Optional)
+
+Customise the MCP behaviour with these environment variables:
+
+| Variable | Default | Description |
+|----------|---------|-------------|
+| `MSTY_SIDECAR_HOST` | `127.0.0.1` | Sidecar API host address |
+| `MSTY_AI_PORT` | `11964` | Local AI Service port |
+| `MSTY_PROXY_PORT` | `11932` | Sidecar proxy port |
+| `MSTY_TIMEOUT` | `10` | API request timeout (seconds) |
+
+Example with custom configuration:
+
+```json
+{
+  "mcpServers": {
+    "msty-admin": {
+      "command": "/absolute/path/to/msty-admin-mcp/.venv/bin/python",
+      "args": ["-m", "src.server"],
+      "cwd": "/absolute/path/to/msty-admin-mcp",
+      "env": {
+        "MSTY_TIMEOUT": "30"
+      }
+    }
+  }
+}
+```
+
 ---
 
 ## Usage Examples
@@ -327,7 +355,7 @@ Claude: Calibration Results for qwen2.5:7b (Reasoning)
 ### Data Storage
 
 | Location | Purpose |
-|----------|---------|
+|----------|--------|
 | Msty Database | Read-only queries (conversations, personas, etc.) |
 | `~/.msty-admin/` | MCP's own metrics and calibration data |
 
@@ -343,7 +371,7 @@ The MCP never writes to Msty's database—it only reads. All metrics and calibra
 
 ### For Local Model Features
 | RAM | Recommended Models | Quality |
-|-----|-------------------|---------|
+|-----|-------------------|--------|
 | 8GB | qwen2.5:3b, gemma3:4b | Basic |
 | 16GB | qwen2.5:7b, qwen2.5-coder:7b | Good |
 | 32GB | qwen2.5:14b, llama3.1:8b | Very Good |
@@ -466,6 +494,13 @@ Contributions welcome! Please:
 
 MIT License - see [LICENSE](LICENSE) for details.
 
+---
+
+## Acknowledgements
+
+- [Msty Studio](https://msty.ai) - The excellent local AI application this MCP administers
+- [Anthropic](https://anthropic.com) - For Claude and the MCP protocol
+- [Model Context Protocol](https://modelcontextprotocol.io) - The foundation making this possible
 
 ---
 
